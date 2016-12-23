@@ -293,6 +293,7 @@ pop: \
 			_${header_name}->${field_name} = res32; \
 		} \
 //::        #endif
+        break; \
 //::      else:
 //::        pass  # TODO: handle other cases (for different bit sizes).
 //::      #endif
