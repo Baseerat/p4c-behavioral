@@ -279,4 +279,26 @@ pop: \
 //::  #endif
     \
 
+/* -- Called in lib/odp-execute.c -- */
+#define OVS_ODP_EXECUTE_GET_LOAD_AVG_32BIT_CASES \
+//::  for header_name in ordered_header_instances_regular:
+//::    for field_name, bit_width in ordered_header_instances_non_virtual_field__name_width[header_name]:
+//::      if bit_width == 32:
+    case OVS_CALC_FIELD_ATTR_${field_name.upper()}: \
+//::        if not OPT_INLINE_EDITING:
+        packet->_${header_name}.${field_name} = res32; \
+//::        else:
+		{ \
+			struct _${header_name}_header *_${header_name} = dp_packet_${header_name}(packet); \
+			_${header_name}->${field_name} = res32; \
+		} \
+//::        #endif
+//::      else:
+//::        pass  # TODO: handle other cases (for different bit sizes).
+//::      #endif
+//::    #endfor
+//::  #endfor
+    \
+
+
 #endif	/* OVS_ACTION_ODP_EXECUTE_H */
