@@ -301,5 +301,27 @@ pop: \
 //::  #endfor
     \
 
+/* -- Called in lib/odp-execute.c -- */
+#define OVS_ODP_EXECUTE_SEND_PROBE_32BIT_CASES \
+//::  for header_name in ordered_header_instances_regular:
+//::    for field_name, bit_width in ordered_header_instances_non_virtual_field__name_width[header_name]:
+//::      if bit_width == 32:
+    case OVS_CALC_FIELD_ATTR_${field_name.upper()}: \
+//::        if not OPT_INLINE_EDITING:
+        data = packet->_${header_name}.${field_name}; \
+//::        else:
+		{ \
+			struct _${header_name}_header *_${header_name} = dp_packet_${header_name}(packet); \
+			data = _${header_name}->${field_name}; \
+		} \
+//::        #endif
+        break; \
+//::      else:
+//::        pass  # TODO: handle other cases (for different bit sizes).
+//::      #endif
+//::    #endfor
+//::  #endfor
+    \
+
 
 #endif	/* OVS_ACTION_ODP_EXECUTE_H */
